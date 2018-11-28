@@ -1,0 +1,55 @@
+ESP32ULP GAS  mpu6050.ulp.pS 			page 1
+
+
+   1              	       
+   2              	.set MPU6050_RA_GYRO_CONFIG, 0x1B
+   3              	.set MPU6050_ACCEL_CONFIG , 0x1C
+   4              	.set MPU6050_ACCEL_XOUT_H, 0x3B
+   5              	.set MPU6050_ACCEL_XOUT_L , 0x3C
+   6              	.set MPU6050_ACCEL_YOUT_H , 0x3D
+   7              	.set MPU6050_ACCEL_YOUT_L , 0x3E
+   8              	.set MPU6050_ACCEL_ZOUT_H , 0x3F
+   9              	.set MPU6050_ACCEL_ZOUT_L , 0x40
+  10              	.set MPU6050_RA_INT_STATUS , 0x3A
+  11              	.set MPU6050_INTERRUPT_MOT_BIT , 6
+  12              	.set MPU6050_RA_INT_ENABLE , 0x38
+  13              	.set MPU6050_INT_EN_MOT_BIT , 6
+  14              	.set MPU6050_RA_SIGNAL_PATH_RESET , 0x68
+  15              	.set MPU6050_PATHRESET_ACCEL_RESET_BIT, 1
+  16              	.set MPU6050_RA_PWR_MGMT_1 , 0x6B
+  17              	.set MPU6050_PWR1_CLKSEL_BIT , 2
+  18              	.set MPU6050_PWR1_CLKSEL_LENGTH ,3
+  19              	.set MPU6050_PWR1_TEMP_DIS_BIT , 3
+  20              	.set MPU6050_PWR1_CYCLE_BIT , 5
+  21              	.set MPU6050_PWR1_SLEEP_BIT , 6
+  22              	.set MPU6050_RA_PWR_MGMT_2 , 0x6C
+  23              	.set MPU6050_PWR2_STBY_XG_BIT , 2
+  24              	.set MPU6050_PWR2_STBY_YG_BIT , 3
+  25              	.set MPU6050_PWR2_STBY_ZG_BIT , 4
+  26              	.set MPU6050_PWR2_LP_WAKE_CTRL_BIT , 7
+  27              	.set MPU6050_PWR2_LP_WAKE_CTRL_LENGTH , 2
+  28              	.set MPU6050_RA_ACCEL_CONFIG , 0x1C
+  29              	.set MPU6050_ACONFIG_AFS_SEL_BIT , 4
+  30              	.set MPU6050_ACONFIG_AFS_SEL_LENGTH , 2
+  31              	.set MPU6050_RA_INT_PIN_CFG , 0x37
+  32              	.set MPU6050_INTCFG_INT_RD_CLEAR_BIT , 4
+  33              	.set MPU6050_INTCFG_LATCH_INT_EN_BIT , 5
+  34              	.set MPU6050_INTCFG_INT_OPEN_BIT , 6
+  35              	.set MPU6050_INTCFG_INT_LEVEL_BIT , 7
+  36              	.set MPU6050_RA_MOT_THR , 0x1F
+  37              	.set MPU6050_RA_MOT_DUR , 0x20
+  38              	.text
+  39              	mpu_config:
+  40 ???? 68023838 	            I2C_WR MPU6050_RA_SIGNAL_PATH_RESET,0x02,7,0,0
+  41 ???? 67013838 	            I2C_WR MPU6050_RA_PWR_MGMT_1,0x01,7,0,0
+  42 ???? 13003838 	            I2C_WR MPU6050_RA_GYRO_CONFIG,0x00,7,0,0
+  43 ???? 10003838 	            I2C_WR MPU6050_ACCEL_CONFIG,0x00,7,0,0
+  44 ???? 28403838 	            I2C_WR MPU6050_RA_INT_ENABLE,0x40,7,0,0
+  45 ???? 23003838 	            I2C_WR MPU6050_RA_INT_PIN_CFG,0x00,7,0,0
+  46 ???? 07023838 	            I2C_WR MPU6050_RA_MOT_THR,0x02,7,0,0
+  47 ???? 04FF3838 	            I2C_WR MPU6050_RA_MOT_DUR,0xff,7,0,0
+  48              	            I2C_WR MPU6050_RA_PWR_MGMT_1,0x20
+  49 ???? 4C073838 	            I2C_WR MPU6050_RA_PWR_MGMT_2,0x07,7,0,0
+  50 ???? 16003830 	 chk_int: I2C_RD MPU6050_RA_INT_STATUS,7,0,0
+  51 ???? 01000182 	            JUMPR Wake_main,1,GE
+  52 ???? 00000080 	            Jump ULP_sleep

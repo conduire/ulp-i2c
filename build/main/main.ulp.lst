@@ -1,0 +1,58 @@
+ESP32ULP GAS  main.ulp.pS 			page 1
+
+
+   1              	       
+   2              	       
+   3              	.set MPU6050_RA_GYRO_CONFIG, 0x1B
+   4              	.set MPU6050_ACCEL_CONFIG , 0x1C
+   5              	.set MPU6050_ACCEL_XOUT_H, 0x3B
+   6              	.set MPU6050_ACCEL_XOUT_L , 0x3C
+   7              	.set MPU6050_ACCEL_YOUT_H , 0x3D
+   8              	.set MPU6050_ACCEL_YOUT_L , 0x3E
+   9              	.set MPU6050_ACCEL_ZOUT_H , 0x3F
+  10              	.set MPU6050_ACCEL_ZOUT_L , 0x40
+  11              	.set MPU6050_RA_INT_STATUS , 0x3A
+  12              	.set MPU6050_RA_INT_ENABLE , 0x38
+  13              	.set MPU6050_RA_SIGNAL_PATH_RESET , 0x68
+  14              	.set MPU6050_RA_PWR_MGMT_1 , 0x6B
+  15              	.set MPU6050_RA_PWR_MGMT_2 , 0x6C
+  16              	.set MPU6050_RA_ACCEL_CONFIG , 0x1C
+  17              	.set MPU6050_RA_INT_PIN_CFG , 0x37
+  18              	.set MPU6050_RA_MOT_THR , 0x1F
+  19              	.set MPU6050_RA_MOT_DUR , 0x20
+  20              	.set sleep_reg, 0
+  21              	    .text
+  22              	    .global entry
+  23              	    entry:
+  24 ???? 00A38013 	            REG_WR ((((0x3ff48C00 + 0x000)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x28) & 0xf
+  25 ???? 0EA38013 	            REG_WR ((((0x3ff48C00 + 0x038)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x28) & 0xf
+  26 ???? 0C438013 	            REG_WR ((((0x3ff48C00 + 0x030)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x10) & 0xf
+  27 ???? 107B8013 	            REG_WR ((((0x3ff48C00 + 0x040)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x1E) & 0xf
+  28 ???? 11B38013 	            REG_WR ((((0x3ff48C00 + 0x044)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x2C) & 0xf
+  29 ???? 03238313 	            REG_WR ((((0x3ff48C00 + 0x00c)) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0xC8) & 0xf
+  30 ???? 01074018 	            REG_WR ((((0x3ff48C00 + 0x004)) - 0x3ff48000) / 4), (((1 << (4))) + (1) - 1), ((1 << (4
+  31 ???? 00A08113 	            REG_WR (((SENS_I2C_SLAVE_ADDR0) - 0x3ff48000) / 4), ((0) + (8) - 1), (0), ((0x68) & 0xf
+  32 ???? 24000080 	            Jump mpu_config
+  33              	mpu_config:
+  34 ???? 44023838 	            I2C_WR MPU6050_RA_SIGNAL_PATH_RESET,0x02,7,0,0
+  35 ???? 43013838 	            I2C_WR MPU6050_RA_PWR_MGMT_1,0x01,7,0,0
+  36 ???? EF003838 	            I2C_WR MPU6050_RA_GYRO_CONFIG,0x00,7,0,0
+  37 ???? EC003838 	            I2C_WR MPU6050_ACCEL_CONFIG,0x00,7,0,0
+  38 ???? 04403838 	            I2C_WR MPU6050_RA_INT_ENABLE,0x40,7,0,0
+  39 ???? FF003838 	            I2C_WR MPU6050_RA_INT_PIN_CFG,0x00,7,0,0
+  40 ???? E3023838 	            I2C_WR MPU6050_RA_MOT_THR,0x02,7,0,0
+  41 ???? E0FF3838 	            I2C_WR MPU6050_RA_MOT_DUR,0xff,7,0,0
+  42              	            I2C_WR MPU6050_RA_PWR_MGMT_1,0x20
+  43 ???? 28073838 	            I2C_WR MPU6050_RA_PWR_MGMT_2,0x07,7,0,0
+  44 ???? 4C000080 	            Jump chk_int
+  45 ???? EE003830 	chk_int: I2C_RD MPU6050_RA_INT_STATUS,7,0,0
+  46 ???? 01000182 	           JUMPR Wake_main,1,GE
+  47 ???? 58000080 	           Jump ULP_sleep
+  48 ???? 00000092 	ULP_sleep: sleep sleep_reg
+  49 ???? 000000B0 	                Halt
+  50              	Wake_main:
+  51 ???? 3000CC29 	                REG_RD ((((0x3ff48000 + 0xc0)) - 0x3ff48000) / 4), ((19) + ((((((((0x1) >> (0)) & 1
+  52 ???? 60004080 	                Jump Wake_main, eq
+  53 ???? 01000090 	                Wake
+  54 ???? 0600601C 	                REG_WR ((((0x3ff48000 + 0x18)) - 0x3ff48000) / 4), ((24) + (((((((0x1) >> (0)) & 1)
+  55 ???? 000000B0 	                Halt
